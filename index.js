@@ -1,3 +1,6 @@
+
+
+
 const bodyParser = require('body-parser');
 const express = require('express');
 const request = require('request');
@@ -27,7 +30,7 @@ const transactionMiner = new TransactionMiner({ blockchain, transactionPool, wal
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'client/dist')));
 
-app.get('/api/blocks', (req, res) => {
+app.get('/api/blocks', (req, res) => {  
   res.json(blockchain.chain);
 });
 
@@ -41,7 +44,7 @@ app.get('/api/blocks/:id', (req, res) => {
 
   const blocksReversed = blockchain.chain.slice().reverse();
 
-  let startIndex = (id-1) * 5;
+  let startIndex = (id - 1) * 5;
   let endIndex = id * 5;
 
   startIndex = startIndex < length ? startIndex : length;
@@ -76,7 +79,7 @@ app.post('/api/transact', (req, res) => {
         chain: blockchain.chain
       });
     }
-  } catch(error) {
+  } catch (error) {
     return res.status(400).json({ type: 'error', message: error.message });
   }
 
@@ -168,12 +171,12 @@ if (isDevelopment) {
     wallet: walletBar, recipient: wallet.publicKey, amount: 15
   });
 
-  for (let i=0; i<20; i++) {
-    if (i%3 === 0) {
+  for (let i = 0; i < 20; i++) {
+    if (i % 3 === 0) {
       walletAction();
       walletFooAction();
-    } else if (i%3 === 1) {
-      walletAction();
+    } else if (i % 3 === 1) {
+      walletAction();  
       walletBarAction();
     } else {
       walletFooAction();
