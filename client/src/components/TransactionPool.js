@@ -4,10 +4,17 @@ import Transaction from './Transaction';
 import { Link } from 'react-router-dom';
 import history from '../history';
 
+import { FormGroup, FormControl} from 'react-bootstrap';
+
+
 const POLL_INERVAL_MS = 10000;
 
 class TransactionPool extends Component {
-  state = { transactionPoolMap: {} };
+  state = { transactionPoolMap: {} , stakes:0};
+
+  updatestakes = event => {
+    this.setState({ stakes: Number(event.target.value) });
+  }
 
   fetchTransactionPoolMap = () => {
     fetch(`${document.location.origin}/api/transaction-pool-map`)
@@ -16,7 +23,8 @@ class TransactionPool extends Component {
   }
 
   fetchMineTransactions = () => {
-    fetch(`${document.location.origin}/api/mine-transactions`)
+    if(this.state.stakes>=75){
+      fetch(`${document.location.origin}/api/mine-transactions`)
       .then(response => {
         if (response.status === 200) {
           alert('success');
@@ -25,6 +33,11 @@ class TransactionPool extends Component {
           alert('The mine-transactions block request did not complete.');
         }
       });
+    }
+    else{
+      alert('The stakes are insufficient. Better luck next time.');
+
+    }
   }
 
   componentDidMount() {
@@ -56,6 +69,16 @@ class TransactionPool extends Component {
           })
         }
         <hr />
+        <br />
+        <FormGroup>
+          <FormControl
+            input='text'
+            placeholder='stakes'
+            value={this.state.stakes}
+            onChange={this.updatestakes}
+          />
+        </FormGroup>
+        <br />
         <Button
           bsStyle="danger"
           onClick={this.fetchMineTransactions}
